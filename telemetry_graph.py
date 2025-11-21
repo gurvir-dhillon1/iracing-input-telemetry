@@ -9,7 +9,7 @@ class TelemetryGraph(pg.PlotWidget):
     self.iracing_client = IracingClient()
     self.iracing_client.start_connection()
     self.graph_settings = {
-      'line_width': 6,
+      'line_width': 4,
       'throttle_color': 'g',
       'brake_color': 'r',
       'throttle_name': 'throttle',
