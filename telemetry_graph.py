@@ -1,10 +1,13 @@
 import pyqtgraph as pg
 import math
 from PySide6.QtCore import QTimer
+from iracing_client import IracingClient
 
 class TelemetryGraph(pg.PlotWidget):
   def __init__(self, buffer_size=200):
     super().__init__()
+    self.iracing_client = IracingClient()
+    self.iracing_client.start_connection()
     self.graph_settings = {
       'line_width': 6,
       'throttle_color': 'g',
@@ -18,6 +21,8 @@ class TelemetryGraph(pg.PlotWidget):
     self.getPlotItem().getAxis('bottom').setVisible(False)
     self.getPlotItem().getAxis('left').setVisible(False)
     self.getPlotItem().getViewBox().setMouseEnabled(x=False, y=False)
+    self.setYRange(0, 1)
+
     #self.addLegend()
 
     self.throttle_line = self.plot([], [], pen=pg.mkPen(self.graph_settings['throttle_color'], width=self.graph_settings['line_width']), name=self.graph_settings['throttle_name'])
@@ -36,14 +41,11 @@ class TelemetryGraph(pg.PlotWidget):
     self.timer = QTimer()
     self.timer.timeout.connect(self.update_data)
     self.timer.start(self.graph_settings['update_timer'])
-
-    self.t = 0
   
   def update_data(self):
-    self.t += 0.05
-    new_throttle = (math.sin(self.t) + 1) / 2
-    new_brake = (math.sin(self.t + math.pi/2) + 1) / 2
-
+    data = self.iracing_client.poll_data()
+    new_throttle = data['Throttle']
+    new_brake = data['Brake']
     self.throttle_data = self.throttle_data[1:] + [new_throttle]
     self.brake_data = self.brake_data[1:] + [new_brake]
 
