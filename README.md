@@ -10,4 +10,4 @@ Real-time visualization of:
 - Throttle (%) in green
 - Brake (%) in red
 
-Draggable overlay using the green bar above the graph
+Draggable using the green bar above the graph
