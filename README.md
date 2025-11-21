@@ -6,7 +6,7 @@ NOTE: Requires iRacing to NOT be running in fullscreen mode (eg. windowed border
 
 ## Features
 Real-time visualization of:
-- Throttle (%)
-- Brake (%)
+- Throttle (%) in green
+- Brake (%) in red
 
 Draggable overlay using the green bar above the graph
