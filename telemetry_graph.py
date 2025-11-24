@@ -1,4 +1,5 @@
 import pyqtgraph as pg
+from PySide6.QtCore import Slot
 
 class TelemetryGraph(pg.PlotWidget):
   def __init__(self, buffer_size=200):
@@ -32,6 +33,7 @@ class TelemetryGraph(pg.PlotWidget):
     self.addItem(self.throttle_label)
     self.addItem(self.brake_label)
 
+  @Slot(dict)
   def update_from_worker(self, data: dict):
     new_throttle = data['Throttle']
     new_brake = data['Brake']
