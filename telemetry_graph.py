@@ -1,11 +1,8 @@
 import pyqtgraph as pg
-from iracing_client import IracingClient
 
 class TelemetryGraph(pg.PlotWidget):
   def __init__(self, buffer_size=200):
     super().__init__()
-    self.iracing_client = IracingClient()
-    self.iracing_client.start_connection()
     self.graph_settings = {
       'line_width': 4,
       'throttle_color': 'g',
