@@ -1,9 +1,11 @@
 import sys
 from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QThread
 from PySide6.QtGui import QKeySequence, QShortcut
 from telemetry_graph import TelemetryGraph
+from iracing_worker import IracingWorker
 APP_NAME = 'input telemetry'
+update_time = 50
 class Overlay(QWidget):
     def __init__(self):
         super().__init__()
@@ -25,6 +27,17 @@ class Overlay(QWidget):
         self.drag_handle.setStyleSheet(self.global_styles)
         self.graph = TelemetryGraph()
         self.graph.setStyleSheet(self.global_styles)
+
+        self.worker_thread = QThread()
+        self.worker = IracingWorker(poll_rate_ms=update_time)
+        self.worker.moveToThread(self.worker_thread)
+
+        self.worker.data_ready.connect(self.graph.update_from_worker)
+        self.worker_thread.started.connect(self.worker.run)
+
+        self.destroyed.connect(self.worker.stop)
+        self.destroyed.connect(self.worker_thread.quit)
+
         layout.addWidget(self.drag_handle)
         layout.addWidget(self.graph)
         layout.setContentsMargins(0,0,0,0)
