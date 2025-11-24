@@ -1,5 +1,4 @@
 import pyqtgraph as pg
-import math
 from PySide6.QtCore import QTimer
 from iracing_client import IracingClient
 
