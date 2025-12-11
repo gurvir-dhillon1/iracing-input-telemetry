@@ -38,6 +38,8 @@ class Overlay(QWidget):
         self.destroyed.connect(self.worker.stop)
         self.destroyed.connect(self.worker_thread.quit)
 
+        self.worker_thread.start()
+
         layout.addWidget(self.drag_handle)
         layout.addWidget(self.graph)
         layout.setContentsMargins(0,0,0,0)
