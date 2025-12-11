@@ -1,6 +1,6 @@
 import sys
 from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout
-from PySide6.QtCore import Qt, QThread
+from PySide6.QtCore import Qt, QThread, QMetaObject
 from PySide6.QtGui import QKeySequence, QShortcut
 from telemetry_graph import TelemetryGraph
 from iracing_worker import IracingWorker
@@ -35,9 +35,6 @@ class Overlay(QWidget):
         self.worker.data_ready.connect(self.graph.update_from_worker)
         self.worker_thread.started.connect(self.worker.run)
 
-        self.destroyed.connect(self.worker.stop)
-        self.destroyed.connect(self.worker_thread.quit)
-
         self.worker_thread.start()
 
         layout.addWidget(self.drag_handle)
@@ -63,6 +60,12 @@ class Overlay(QWidget):
         if event.buttons() & Qt.LeftButton and self.drag_position:
             self.move((event.globalPosition() - self.drag_position).toPoint())
             event.accept()
+    
+    def closeEvent(self, event):
+        QMetaObject.invokeMethod(self.worker, "stop", Qt.BlockingQueuedConnection)
+        self.worker_thread.quit()
+        self.worker_thread.wait()
+        event.accept()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
