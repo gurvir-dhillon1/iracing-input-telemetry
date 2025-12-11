@@ -6,13 +6,15 @@ class IracingWorker(QObject):
   def __init__(self, poll_rate_ms=50):
     super().__init__()
     self.client = IracingClient()
-    self.timer = QTimer()
-    self.timer.setInterval(poll_rate_ms)
-    self.timer.timeout.connect(self.emit_data)
     self.running = False
+    self.poll_rate_ms = poll_rate_ms
+    self.timer = None
 
   def run(self):
     self.client.start_connection()
+    self.timer = QTimer()
+    self.timer.setInterval(self.poll_rate_ms)
+    self.timer.timeout.connect(self.emit_data)
     self.running = True
     self.timer.start()
 
