@@ -4,6 +4,7 @@ from PySide6.QtCore import Slot
 class TelemetryGraph(pg.PlotWidget):
   def __init__(self, buffer_size=200):
     super().__init__()
+    pg.setConfigOptions(antialias=True)
     self.graph_settings = {
       'line_width': 4,
       'throttle_color': 'g',
@@ -19,6 +20,13 @@ class TelemetryGraph(pg.PlotWidget):
     self.setYRange(0, 1)
 
     #self.addLegend()
+    self.static_lines = []
+    for i in range(0, 125, 25):
+      width = 0.75 if i % 50 == 0 else 0.5
+      self.static_lines.append(pg.InfiniteLine(pos=i/100, angle=0, pen=pg.mkPen(color=(100, 100, 100), width=width), movable=False))
+
+    for line in self.static_lines:
+      self.addItem(line)
 
     self.throttle_line = self.plot([], [], pen=pg.mkPen(self.graph_settings['throttle_color'], width=self.graph_settings['line_width']), name=self.graph_settings['throttle_name'])
     self.brake_line = self.plot([], [], pen=pg.mkPen(self.graph_settings['brake_color'], width=self.graph_settings['line_width']), name=self.graph_settings['brake_name'])
