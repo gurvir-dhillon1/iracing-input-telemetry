@@ -23,6 +23,10 @@ class IracingWorker(QObject):
     if self.running:
       self.data_ready.emit(self.client.poll_data())
 
+  @Slot()
   def stop(self):
     self.running = False
+    if self.timer:
+      self.timer.stop()
+      self.timer.deleteLater()
     self.client.destroy_connection()
