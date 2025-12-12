@@ -4,7 +4,7 @@ A simple overlay for iRacing that visualizes throttle and brake data in real-tim
 
 **NOTE: Requires iRacing to NOT be running in fullscreen mode (eg. windowed borderless) otherwise the overlay will not show above your iRacing client**
 
-<img width="355" height="227" alt="image" src="https://github.com/user-attachments/assets/816c2697-413f-4316-a57f-b200fba452c5" />
+<img width="321" height="115" alt="image" src="https://github.com/user-attachments/assets/44e1cbee-6631-41bb-a892-bf26313a4dee" />
 
 ## Features
 Real-time visualization of:
