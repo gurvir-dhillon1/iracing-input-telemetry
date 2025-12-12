@@ -11,22 +11,20 @@ class Overlay(QWidget):
         super().__init__()
         quit_shortcut = QShortcut(QKeySequence('f6'), self)
         quit_shortcut.activated.connect(self.close)
-        self.global_styles = """
+        self.drag_handle_styles = """
             background-color: rgba(0, 255, 0, 150);
-            border-radius: 8px;
         """
         self.drag_position = None
 
         layout = QVBoxLayout()
         self.drag_handle = QWidget()
-        self.drag_handle.setFixedHeight(30)
+        self.drag_handle.setFixedHeight(10)
         self.drag_handle.setSizePolicy(
             self.drag_handle.sizePolicy().horizontalPolicy(),
             self.drag_handle.sizePolicy().verticalPolicy()
         )
-        self.drag_handle.setStyleSheet(self.global_styles)
+        self.drag_handle.setStyleSheet(self.drag_handle_styles)
         self.graph = TelemetryGraph()
-        self.graph.setStyleSheet(self.global_styles)
 
         self.worker_thread = QThread()
         self.worker = IracingWorker(poll_rate_ms=update_time)
