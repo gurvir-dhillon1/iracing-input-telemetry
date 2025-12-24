@@ -60,9 +60,12 @@ class Overlay(QWidget):
             event.accept()
     
     def closeEvent(self, event):
-        QMetaObject.invokeMethod(self.worker, "stop", Qt.BlockingQueuedConnection)
+        QMetaObject.invokeMethod(self.worker, "stop", Qt.QueuedConnection)
         self.worker_thread.quit()
-        self.worker_thread.wait()
+        if not self.worker_thread.wait(2000):
+            print("worker thread did not stop gracefully, terminating...")
+            self.worker_thread.terminate()
+            self.worker_thread.wait()
         event.accept()
 
 if __name__ == "__main__":
