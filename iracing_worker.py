@@ -29,4 +29,10 @@ class IracingWorker(QObject):
     if self.timer:
       self.timer.stop()
       self.timer.deleteLater()
-    self.client.destroy_connection()
+      self.timer = None
+    try:
+      self.data_ready.disconnect()
+    except:
+      pass
+    if self.client:
+      self.client.destroy_connection()
